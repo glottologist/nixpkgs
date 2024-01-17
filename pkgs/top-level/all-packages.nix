@@ -36919,6 +36919,8 @@ with pkgs;
     withGui = false;
   };
 
+  anchor = callPackage ../applications/blockchains/anchor { };
+
   aperture = callPackage ../applications/blockchains/aperture { };
 
   backdown = callPackage ../tools/misc/backdown { };
