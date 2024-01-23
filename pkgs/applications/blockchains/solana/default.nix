@@ -98,8 +98,8 @@ in
       ];
 
     postInstall = ''
-      mkdir -p $out/bin/sdk
-      cp -a ./sdk/* $out/bin/sdk/
+      mkdir -p $out/bin/sdk/bpf
+      cp -a ./sdk/bpf/* $out/bin/sdk/bpf/
     '';
 
     # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
