@@ -97,10 +97,10 @@ in
         Libsystem
       ];
 
-    postInstall = ''
-      mkdir -p $out/bin/sdk/bpf
-      cp -a ./sdk/bpf/* $out/bin/sdk/bpf/
-    '';
+    #postInstall = ''
+    #  mkdir -p $out/bin/sdk/bpf
+    #  cp -a ./sdk/bpf/* $out/bin/sdk/bpf/
+    #'';
 
     # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
     # try to build RocksDB from source.
