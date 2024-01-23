@@ -37107,6 +37107,8 @@ with pkgs;
 
   pycoin = with python3Packages; toPythonApplication pycoin;
 
+  seahorse = callPackage ../applications/blockchains/seahorse { };
+
   stellar-core = callPackage ../applications/blockchains/stellar-core { };
 
   sumokoin = callPackage ../applications/blockchains/sumokoin { };
