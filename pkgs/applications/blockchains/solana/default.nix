@@ -11,6 +11,7 @@
   pkg-config,
   openssl,
   nix-update-script,
+  rsync,
   # Taken from https://github.com/solana-labs/solana/blob/master/scripts/cargo-install-all.sh#L84
   solanaPkgs ?
     [
@@ -40,6 +41,30 @@
 
   inherit (darwin.apple_sdk_11_0) Libsystem;
   inherit (darwin.apple_sdk_11_0.frameworks) System IOKit AppKit Security;
+  bpfTools =
+    stdenv.mkDerivation
+    {
+      name = "bpf-tools";
+      version = "v1.39";
+      src = builtins.fetchurl (
+        if stdenv.isDarwin
+        then {
+          sha256 = "1n538g50f7jscigrlhyfpd554jrha03bn80j7ly2kln87rj2a77j";
+          url = "https://github.com/solana-labs/bpf-tools/releases/download/v1.39/platform-tools-osx-x86_64.tar.bz2";
+        }
+        else {
+          sha256 = "0p8r3r364qjmvbfy09n4029nw0mhvmlbl9pzfwimz60as9lz7a5a";
+
+          url = "https://github.com/solana-labs/bpf-tools/releases/download/v1.39/platform-tools-linux-x86_64.tar.bz2";
+        }
+      );
+      sourceRoot = ".";
+      dontBuild = true;
+      installPhase = ''
+        mkdir $out
+        cp -R . $out/
+      '';
+    };
 in
   rustPlatform.buildRustPackage rec {
     pname = "solana-cli";
@@ -90,9 +115,16 @@ in
         Libsystem
       ];
 
+
+preInstall = ''
+              mkdir -p $out/bin/sdk/bpf/dependencies
+            '';
+
+
+
     postInstall = ''
-      mkdir -p $out/bin/sdk/bpf
-      cp -a ./sdk/bpf/* $out/bin/sdk/bpf/
+      ${rsync}/bin/rsync -a ./sdk $out/bin/
+      ln -s ${bpfTools} $out/bin/sdk/bpf/dependencies/bpf-tools
     '';
 
     # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
