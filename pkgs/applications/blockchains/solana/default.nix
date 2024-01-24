@@ -23,18 +23,11 @@
       "solana-ledger-tool"
       "solana-log-analyzer"
       "solana-net-shaper"
-      "solana-validator"
       "cargo-build-bpf"
       "cargo-build-sbf"
       "cargo-test-bpf"
       "cargo-test-sbf"
       "solana-validator"
-      "solana-dos"
-      "solana-install-init"
-      "solana-stake-accounts"
-      "solana-test-validator"
-      "solana-tokens"
-      "solana-watchtower"
     ]
     ++ [
       # XXX: Ensure `solana-genesis` is built LAST!
