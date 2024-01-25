@@ -50,12 +50,12 @@
         if stdenv.isDarwin
         then {
           sha256 = "1n538g50f7jscigrlhyfpd554jrha03bn80j7ly2kln87rj2a77j";
-          url = "https://github.com/solana-labs/bpf-tools/releases/download/v1.39/platform-tools-osx-x86_64.tar.bz2";
+          url = "https://github.com/solana-labs/bpf-tools/releases/download/${version}/platform-tools-osx-x86_64.tar.bz2";
         }
         else {
           sha256 = "0p8r3r364qjmvbfy09n4029nw0mhvmlbl9pzfwimz60as9lz7a5a";
 
-          url = "https://github.com/solana-labs/bpf-tools/releases/download/v1.39/platform-tools-linux-x86_64.tar.bz2";
+          url = "https://github.com/solana-labs/bpf-tools/releases/download/${version}/platform-tools-linux-x86_64.tar.bz2";
         }
       );
       sourceRoot = ".";
@@ -115,16 +115,15 @@ in
         Libsystem
       ];
 
-
-preInstall = ''
-              mkdir -p $out/bin/sdk/bpf/dependencies
-            '';
-
-
+    preInstall = ''
+      mkdir -p $out/bin/sdk/bpf/dependencies
+        mkdir -p $out/.cache/solana/${version}
+    '';
 
     postInstall = ''
       ${rsync}/bin/rsync -a ./sdk $out/bin/
       ln -s ${bpfTools} $out/bin/sdk/bpf/dependencies/bpf-tools
+      ${rsync}/bin/rsync -a  $out/bin/sdk/bpf/dependencies/bpf-tools $out/.cache/solana/${version}
     '';
 
     # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
